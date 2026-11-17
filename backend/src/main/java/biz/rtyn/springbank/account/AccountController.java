@@ -1,14 +1,15 @@
 package biz.rtyn.springbank.account;
 
 import biz.rtyn.springbank.money.Money;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.time.Instant;
 import java.util.Currency;
 import java.util.List;
@@ -34,6 +35,16 @@ public class AccountController {
         return AccountResponse.from(accountService.get(id));
     }
 
+    @PostMapping
+    public ResponseEntity<AccountResponse> open(@Valid @RequestBody OpenAccountRequest request) {
+        Account account = accountService.open(request.name());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(account.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(AccountResponse.from(account));
+    }
+
     public record OpenAccountRequest(@NotNull @Size(max = 200) String name) {
     }
 
@@ -42,7 +53,7 @@ public class AccountController {
             String name,
             AccountType type,
             Currency currency,
-            String balance,
+            Money balance,
             Instant opened_at
     ) {
         public static AccountResponse from(Account account) {
@@ -51,7 +62,7 @@ public class AccountController {
                     account.getName(),
                     account.getType(),
                     account.getCurrency(),
-                    account.getBalance().amount().toString(),
+                    account.getBalance(),
                     account.getOpenedAt()
             );
         }

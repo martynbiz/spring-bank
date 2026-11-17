@@ -20,8 +20,14 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Account get(long id) {
         return accountRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Account", id));
+    }
+
+    @Transactional
+    public Account open(String name) {
+        return accountRepository.save(Account.openCustomerAccount(name));
     }
 }

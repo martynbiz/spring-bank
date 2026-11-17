@@ -30,6 +30,22 @@ public class Account {
     @Column(name = "opened_at", nullable = false)
     private Instant openedAt;
 
+    protected Account() {
+        // for JPA
+    }
+
+    private Account(String name, AccountType type, Currency currency) {
+        this.name = name;
+        this.type = type;
+        this.currencyCode = currency.getCurrencyCode();
+        this.balance = BigDecimal.ZERO;
+        this.openedAt = Instant.now();
+    }
+
+    public static Account openCustomerAccount(String name) {
+        return new Account(name, AccountType.LIABILITY, Money.GBP);
+    }
+
     public Long getId() {
         return id;
     }

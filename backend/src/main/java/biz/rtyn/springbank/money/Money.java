@@ -1,5 +1,6 @@
 package biz.rtyn.springbank.money;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * An amount of money in one currency. Immutable, and always held at the
  * currency's own number of decimal places (2 for GBP).
  */
+@JsonAutoDetect(isGetterVisibility = JsonAutoDetect.Visibility.NONE)
 public record Money(
         @JsonFormat(shape = JsonFormat.Shape.STRING) BigDecimal amount,
         Currency currency) {
