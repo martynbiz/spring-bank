@@ -15,12 +15,45 @@ public class AccountControllerTest {
     MockMvcTester mvc;
 
     @Test
-    void listAccounts() {
+    void listAccountsReturnsAccounts() {
         var response = mvc.get().uri("/accounts");
 
         assertThat(response).hasStatusOk();
         assertThat(response).hasContentType(MediaType.APPLICATION_JSON);
         assertThat(response).bodyJson().extractingPath("$[0].name").isEqualTo("John");
         assertThat(response).bodyJson().extractingPath("$[1].name").isEqualTo("Mary");
+    }
+
+    @Test
+    void getAccountWithValidIdReturnsAccount() {
+        var response = mvc.get().uri("/accounts/1");
+
+        assertThat(response).hasStatusOk();
+        assertThat(response).hasContentType(MediaType.APPLICATION_JSON);
+        assertThat(response).bodyJson().isLenientlyEqualTo("""
+                {
+                  "id": 1,
+                  "name": "John",
+                  "type": "LIABILITY",
+                  "currency": "GBP",
+                  "balance": "0.00"
+                }
+                """);
+    }
+
+    @Test
+    void getAccountWithInvalidIdReturnsErrorResponse() {
+        var response = mvc.get().uri("/accounts/999");
+
+        assertThat(response).hasStatus4xxClientError();
+        assertThat(response).hasContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(response).bodyJson().isLenientlyEqualTo("""
+                {
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "Account 999 was not found",
+                  "instance": "/accounts/999"
+                }
+                """);
     }
 }

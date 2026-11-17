@@ -4,9 +4,11 @@ import biz.rtyn.springbank.money.Money;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Currency;
 import java.util.List;
@@ -27,6 +29,11 @@ public class AccountController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    public AccountResponse getById(@PathVariable long id) {
+        return AccountResponse.from(accountService.get(id));
+    }
+
     public record OpenAccountRequest(@NotNull @Size(max = 200) String name) {
     }
 
@@ -35,7 +42,7 @@ public class AccountController {
             String name,
             AccountType type,
             Currency currency,
-            Money balance,
+            String balance,
             Instant opened_at
     ) {
         public static AccountResponse from(Account account) {
@@ -44,7 +51,7 @@ public class AccountController {
                     account.getName(),
                     account.getType(),
                     account.getCurrency(),
-                    account.getBalance(),
+                    account.getBalance().amount().toString(),
                     account.getOpenedAt()
             );
         }
