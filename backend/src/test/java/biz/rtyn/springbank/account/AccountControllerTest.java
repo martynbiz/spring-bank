@@ -37,8 +37,8 @@ public class AccountControllerTest {
 
         assertThat(response).hasStatusOk();
         assertThat(response).hasContentType(MediaType.APPLICATION_JSON);
-        assertThat(response).bodyJson().extractingPath("$[0].name").isEqualTo("John");
-        assertThat(response).bodyJson().extractingPath("$[1].name").isEqualTo("Mary");
+        assertThat(response).bodyJson().extractingPath("$.content[0].name").isEqualTo("John");
+        assertThat(response).bodyJson().extractingPath("$.content[1].name").isEqualTo("Mary");
     }
 
     @Test

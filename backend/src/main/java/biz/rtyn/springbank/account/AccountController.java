@@ -4,6 +4,9 @@ import biz.rtyn.springbank.money.Money;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,10 +27,8 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<AccountResponse> list() {
-        return accountService.list().stream()
-                .map(AccountResponse::from)
-                .toList();
+    public PagedModel<AccountResponse> list(AccountFilter filter, @PageableDefault(size = 20, sort = "openedAt") Pageable pageable) {
+        return new PagedModel<>(accountService.search(filter, pageable).map(AccountResponse::from));
     }
 
     @GetMapping("/{id}")
