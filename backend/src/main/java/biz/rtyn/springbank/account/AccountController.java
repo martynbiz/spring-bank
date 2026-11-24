@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Currency;
 import java.util.List;
@@ -32,8 +34,13 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public AccountResponse getById(@PathVariable long id) {
-        return AccountResponse.from(accountService.get(id));
+    public ResponseEntity<AccountResponse> getById(@PathVariable long id) {
+        Account account = accountService.get(id);
+        // Returning an ETag lets Spring answer If-None-Match with 304 Not Modified for us
+        return ResponseEntity.ok()
+                .eTag(String.valueOf(account.getVersion()))
+                .cacheControl(CacheControl.maxAge(Duration.ofSeconds(60)).cachePublic())
+                .body(AccountResponse.from(account));
     }
 
     @PostMapping

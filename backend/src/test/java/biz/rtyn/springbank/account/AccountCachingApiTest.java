@@ -14,35 +14,35 @@ class AccountCachingApiTest {
 
 //    static final String NEW_EVENT = """
 //            {
-//              "title": "Test Gig",
-//              "category": "MUSIC",
-//              "venueId": 1,
-//              "startsAt": "2030-09-01T19:30:00Z",
-//              "description": "Created by a test"
+//              "name": "Martin",
+//              "type": "LIABILITY",
+//              "currencyCode": "GBP",
+//              "balance": "0.00"
+//              "openedAt": "2030-09-01T19:30:00Z",
 //            }
 //            """;
 //
-//    @Autowired
-//    MockMvcTester mvc;
-//
-//    @Test
-//    void anAccountHasAnETagAndMayBeCachedForAMinute() {
-//        var response = mvc.get().uri("/accounts/5");
-//
-//        assertThat(response).hasStatusOk();
-//        assertThat(response).headers().hasValue("ETag", "\"0\"");
-//        assertThat(response).headers().hasValue("Cache-Control", "max-age=60, public");
-//    }
-//
-//    @Test
-//    void aMatchingIfNoneMatchIs304WithNoBody() {
-//        var response = mvc.get().uri("/accounts/5").header("If-None-Match", "\"0\"");
-//
-//        assertThat(response).hasStatus(HttpStatus.NOT_MODIFIED);
-//        assertThat(response).body().isEmpty();
-//        assertThat(response).headers().hasValue("ETag", "\"0\"");
-//    }
-//
+    @Autowired
+    MockMvcTester mvc;
+
+    @Test
+    void anAccountHasAnETagAndMayBeCachedForAMinute() {
+        var response = mvc.get().uri("/accounts/1");
+
+        assertThat(response).hasStatusOk();
+        assertThat(response).headers().hasValue("ETag", "\"0\"");
+        assertThat(response).headers().hasValue("Cache-Control", "max-age=60, public");
+    }
+
+    @Test
+    void aMatchingIfNoneMatchIs304WithNoBody() {
+        var response = mvc.get().uri("/accounts/5").header("If-None-Match", "\"0\"");
+
+        assertThat(response).hasStatus(HttpStatus.NOT_MODIFIED);
+        assertThat(response).body().isEmpty();
+        assertThat(response).headers().hasValue("ETag", "\"0\"");
+    }
+
 //    @Test
 //    void changingTheAccountChangesTheETag() {
 //        long id = createAccount();

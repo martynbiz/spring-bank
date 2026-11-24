@@ -30,6 +30,10 @@ public class Account {
     @Column(name = "opened_at", nullable = false)
     private Instant openedAt;
 
+    // Hibernate adds 1 on every update. Guide 03 turns it into an ETag.
+    @Version
+    private long version;
+
     protected Account() {
         // for JPA
     }
@@ -63,6 +67,10 @@ public class Account {
     }
     public Instant getOpenedAt() {
         return openedAt;
+    }
+
+    public long getVersion() {
+        return version;
     }
 
 }
