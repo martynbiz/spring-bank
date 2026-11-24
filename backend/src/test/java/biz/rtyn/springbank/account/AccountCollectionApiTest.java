@@ -40,29 +40,29 @@ public class AccountCollectionApiTest {
                 """);
     }
 
-//    @Test
-//    void filtersByCurrencyCodeIgnoringCaseAndByType() {
-//        var response = mvc.get().uri("/accounts?currencyCode=eur&type=liability");
-//
-//        assertThat(response).bodyJson().extractingPath("$.content[*].name")
-//                .isEqualTo(List.of("William", "Brenda"));
-//    }
+    @Test
+    void filtersByCurrencyCodeIgnoringCaseAndByType() {
+        var response = mvc.get().uri("/accounts?currencyCode=eur&type=LIABILITY");
 
-//    @Test
-//    void filtersByDateRange() {
-//        var response = mvc.get().uri("/accounts?from=2025-06-01T00:00:00Z&to=2026-05-31T00:00:00Z");
-//
-//        assertThat(response).bodyJson().extractingPath("$.content[*].name")
-//                .isEqualTo(List.of("David", "Anne"));
-//    }
+        assertThat(response).bodyJson().extractingPath("$.content[*].name")
+                .isEqualTo(List.of("William", "Brenda"));
+    }
 
-//    @Test
-//    void sortsByName() {
-//        var response = mvc.get().uri("/accounts?currencyCode=EUR&sort=openedAt,desc");
-//
-//        assertThat(response).bodyJson().extractingPath("$.content[*].title").isEqualTo(List.of(
-//                "William", "Brenda"));
-//    }
+    @Test
+    void filtersByDateRange() {
+        var response = mvc.get().uri("/accounts?from=2025-06-01T00:00:00Z&to=2026-05-31T00:00:00Z");
+
+        assertThat(response).bodyJson().extractingPath("$.content[*].name")
+                .isEqualTo(List.of("David", "Anne"));
+    }
+
+    @Test
+    void sortsByOpenedAt() {
+        var response = mvc.get().uri("/accounts?currencyCode=EUR&sort=openedAt,desc");
+
+        assertThat(response).bodyJson().extractingPath("$.content[*].name").isEqualTo(List.of(
+                "Brenda", "William"));
+    }
 
     @Test
     void refusesToSortByAnythingElse() {

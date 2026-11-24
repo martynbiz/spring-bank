@@ -8,8 +8,8 @@ CREATE TABLE account (
 );
 
 insert into account (name, type, currency, balance, opened_at) values
-    ('John', 'LIABILITY', 'GBP', 0.0000, '2025-09-07 00:00:00+00'),
-    ('Mary', 'LIABILITY', 'GBP', 0.0000, '2025-10-17 00:00:00+00'),
+    ('John', 'LIABILITY', 'GBP', 0.0000, '2025-03-07 00:00:00+00'),
+    ('Mary', 'LIABILITY', 'GBP', 0.0000, '2025-04-17 00:00:00+00'),
     ('David', 'LIABILITY', 'GBP', 0.0000, '2025-11-17 00:00:00+00'),
     ('Anne', 'LIABILITY', 'GBP', 0.0000, '2026-05-10 00:00:00+00'),
     ('William', 'LIABILITY', 'EUR', 0.0000, '2026-07-11 00:00:00+00'),
